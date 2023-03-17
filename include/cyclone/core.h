@@ -9,8 +9,10 @@ namespace cyclone {
 			real x;
 			real y;
 			real z;
+		#ifndef CY_NO_PADDING
 		private:
 			real pad;
+		#endif
 
 		public:
 			Vec3() : x(0), y(0), z(0) {}
@@ -43,6 +45,20 @@ namespace cyclone {
 				z += vector.z * scale;
 			}
 
+			real scalarProduct(const Vec3& vector) const {
+				return x * vector.x + y * vector.y + z * vector.z;
+			}
+
+			Vec3 componentProduct(const Vec3& other) {
+				return Vec3(x * other.x, y * other.y, z * other.z);
+			}
+
+			void componentProductUpdate(const Vec3& other) {
+				x *= other.x;
+				y *= other.y;
+				z *= other.z;
+			}
+
 			void operator*=(const real scalar) {
 				x *= scalar;
 				y *= scalar;
@@ -60,6 +76,14 @@ namespace cyclone {
 				y -= other.y;
 				z -= other.z;
 			}
+			
+			Vec3 vectorProduct(const Vec3& vector) const {
+				return Vec3(
+					y * vector.z - z * vector.y,
+					z * vector.x - x * vector.z,
+					x * vector.y - y * vector.x
+				);
+			}
 
 			Vec3 operator*(const real scalar) const {
 				return Vec3(x * scalar, y * scalar, z * scalar);
@@ -71,6 +95,22 @@ namespace cyclone {
 
 			Vec3 operator-(const Vec3& other) const {
 				return Vec3(x - other.x, y - other.y, z - other.z);
+			}
+
+			real operator*(const Vec3& vector) const {
+				return x * vector.x + y * vector.y + z * vector.z;
+			}
+
+			Vec3 operator%(const Vec3& vector) const {
+				return Vec3(
+					y * vector.z - z * vector.y,
+					z * vector.x - x * vector.z,
+					x * vector.y - y * vector.x
+				);
+			}
+
+			void operator%=(const Vec3& vector) {
+				*this = vectorProduct(vector);
 			}
 	};
 }
