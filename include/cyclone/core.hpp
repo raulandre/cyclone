@@ -1,6 +1,6 @@
 #ifndef CORE_H
 #define CORE_H
-#include "precision.h"
+#include "cyclone/precision.hpp"
 #include <cmath>
 
 namespace cyclone {
