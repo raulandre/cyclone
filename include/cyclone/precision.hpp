@@ -1,5 +1,5 @@
-#ifndef PRECISION_H
-#define PRECISION_H
+#ifndef PRECISION_HPP
+#define PRECISION_HPP
 namespace cyclone {
 	#ifdef CY_DOUBLE_PRECISION
 		typedef double real;

@@ -1,7 +1,9 @@
-#ifndef CORE_H
-#define CORE_H
+#ifndef CORE_HPP
+#define CORE_HPP
 #include "cyclone/precision.hpp"
+#include <raylib.h>
 #include <cmath>
+#include <sstream>
 
 namespace cyclone {
 	class Vec3 {
@@ -112,6 +114,19 @@ namespace cyclone {
 			void operator%=(const Vec3& vector) {
 				*this = vectorProduct(vector);
 			}
+
+			operator Vector3() const { return Vector3{ .x = x, .y = y, .z = z }; }
+
+			std::string str() const {
+				std::stringstream ss;
+				ss << "[" << x << ", " << y << ", " << z << "] ";
+				return ss.str();
+			}
+
+			static Vec3 unit() {
+				return Vec3(1, 1, 1);
+			}
 	};
 }
+
 #endif
