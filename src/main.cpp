@@ -12,6 +12,7 @@ using namespace std;
 using namespace cyclone;
 
 int main(int argc, char *argv[]) {
+	SetConfigFlags(FLAG_MSAA_4X_HINT);
 	InitWindow(1366, 768, "Physics Engine");
 	SetTargetFPS(60);
 
