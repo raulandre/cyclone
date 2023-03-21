@@ -4,6 +4,7 @@
 #include <cyclone/particleIntegrator.hpp>
 #include <cyclone/forceGenerators/particleGravity.hpp>
 #include <cyclone/forceGenerators/particleDrag.hpp>
+#include <cyclone/forceGenerators/particleSpring.hpp>
 #include <raylib.h>
 #include <sstream>
 
@@ -21,27 +22,27 @@ int main(int argc, char *argv[]) {
     camera.fovy = 45.0f;                                // Camera field-of-view Y
     camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type	
 
-	Particle p1, p2, p3;
-	p1.setMass(10);
-	p1.position = Vec3(10, 40, 0);
+	Particle p1, p2;
+	p1.setMass(2);
+	p1.position = Vec3(0, 45, 0);
 	p1.setDamping(1);
-	p2.setMass(20);
-	p2.position = Vec3(-10, 40, 0);
-	p2.setDamping(1);
-	p3.setMass(30);
-	p3.position = Vec3(-5, 40, 0);
-	p3.setDamping(1);
 
-	ParticleForceRegistry registry;	  
+	p2.setMass(2);
+	p2.position = Vec3(0, 50, 0);
+	p2.setDamping(1);
+
+	ParticleForceRegistry registry;
 	ParticleIntegrator integrator;
 
 	ParticleGravity pg(Vec3(0.0, -10.0, 0.0));
-	ParticleDrag pd(1.0, 1.0);
+	ParticleDrag pd(0.3, 0.4);
+	ParticleSpring ps(&p2, 1.0f, 0.4f);
 
-	registry.add(&pg, &p1, &p2, &p3);
-	registry.add(&pd, &p1, &p2, &p3);
+	registry.add(&pg, &p1);
+	registry.add(&pd, &p1);
+	registry.add(&ps, &p1, &p2);
 
-	integrator.add(&p1, &p2, &p3);
+	integrator.add(&p1);
 
  	DisableCursor();
 	while(!WindowShouldClose()) {
@@ -53,9 +54,9 @@ int main(int argc, char *argv[]) {
           BeginDrawing();
           ClearBackground(BLACK);
           BeginMode3D(camera);
-          DrawCube(p1.position, 2, 2, 2,PINK);
-          DrawCube(p2.position, 2, 2, 2, YELLOW);
-          DrawCube(p3.position, 2, 2, 2, SKYBLUE);
+		  DrawLine3D(p1.position, p2.position, PINK);
+          DrawCube(p1.position, 2, 2, 2, SKYBLUE);
+		  DrawCube(p2.position, 8, 1, 8, YELLOW);
           DrawGrid(100, 1.0f);
           EndMode3D();
           DrawText(ss.str().c_str(), 10, 10, 28, RED);
