@@ -24,33 +24,41 @@ int main(int argc, char *argv[]) {
     camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type	
 
 	Particle p1, p2;
-	p1.setMass(2);
+	p1.setMass(15);
 	p1.position = Vec3(0, 45, 0);
-	p1.setDamping(1);
+	p1.setDamping(0.994);
 
-	p2.setMass(2);
+	p2.setMass(100);
 	p2.position = Vec3(0, 50, 0);
-	p2.setDamping(1);
 
 	ParticleForceRegistry registry;
 	ParticleIntegrator integrator;
 
 	ParticleGravity pg(Vec3(0.0, -10.0, 0.0));
 	ParticleDrag pd(0.3, 0.4);
-	ParticleSpring ps(&p2, 1.0f, 0.4f);
+	ParticleSpring ps(&p2, 25.0f, 4.0f);
 
 	registry.add(&pg, &p1);
 	registry.add(&pd, &p1);
 	registry.add(&ps, &p1, &p2);
 
-	integrator.add(&p1);
+	integrator.add(&p1, &p2);
 
  	DisableCursor();
 	while(!WindowShouldClose()) {
+		  PollInputEvents();
           UpdateCamera(&camera, CAMERA_CUSTOM);
           std::stringstream ss;
           ss << "FPS: " << GetFPS();
 		  registry.updateForces(GetFrameTime());
+
+		  if(IsKeyDown(KEY_J)) {
+			p2.position -= Vec3(0, 1, 0);
+		  }
+
+		  if(IsKeyDown(KEY_K)) {
+			p2.position += Vec3(0, 1, 0);
+		  }
 
           BeginDrawing();
           ClearBackground(BLACK);
