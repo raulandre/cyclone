@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
 
  	DisableCursor();
 	while(!WindowShouldClose()) {
-          UpdateCamera(&camera, CAMERA_FREE);
+          UpdateCamera(&camera, CAMERA_CUSTOM);
           std::stringstream ss;
           ss << "FPS: " << GetFPS();
 		  registry.updateForces(GetFrameTime());
