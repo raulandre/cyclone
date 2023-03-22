@@ -15,6 +15,17 @@ namespace cyclone {
 		ParticleSpring(Particle *other, real springConstant, real restLength) : other(other), springConstant(springConstant), restLength(restLength) {}
 		virtual void updateForce(Particle *particle, real duration);
 	};
+
+	class ParticleAnchoredSpring : public ParticleForceGenerator
+	{
+		Vec3 *anchor;
+		real springConstant;
+		real restLength;
+
+	public:
+		ParticleAnchoredSpring(Vec3 *anchor, real springConstant, real restLength) : anchor(anchor), springConstant(springConstant), restLength(restLength) {}
+		virtual void updateForce(Particle *particle, real duration);
+	};
 }
 
 #endif

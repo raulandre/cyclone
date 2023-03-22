@@ -7,6 +7,7 @@
 #include <cyclone/forceGenerators/particleSpring.hpp>
 #include <raylib.h>
 #include <sstream>
+#include <iostream>
 
 using namespace std;
 using namespace cyclone;
@@ -23,55 +24,54 @@ int main(int argc, char *argv[]) {
     camera.fovy = 45.0f;                                // Camera field-of-view Y
     camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type	
 
-	Particle p1, p2;
-	p1.setMass(15);
+	Particle p1;
+	p1.setMass(2);
 	p1.position = Vec3(0, 45, 0);
 	p1.setDamping(0.994);
 
-	p2.setMass(100);
-	p2.position = Vec3(0, 50, 0);
+	Vec3 anchor(0.0, 50.0, 0.0);
 
 	ParticleForceRegistry registry;
 	ParticleIntegrator integrator;
 
 	ParticleGravity pg(Vec3(0.0, -10.0, 0.0));
 	ParticleDrag pd(0.3, 0.4);
-	ParticleSpring ps(&p2, 25.0f, 4.0f);
+	ParticleAnchoredSpring pas(&anchor, 1.0, 2.0);
 
 	registry.add(&pg, &p1);
 	registry.add(&pd, &p1);
-	registry.add(&ps, &p1, &p2);
+	registry.add(&pas, &p1);
 
-	integrator.add(&p1, &p2);
+	integrator.add(&p1);
+
+	Ray r;
+	RayCollision rcol;
 
  	DisableCursor();
+
+	real lastX = GetMouseX();
+	real lastY = GetMouseY();
 	while(!WindowShouldClose()) {
-		  PollInputEvents();
-          UpdateCamera(&camera, CAMERA_CUSTOM);
+       	  UpdateCamera(&camera, CAMERA_CUSTOM);
+
           std::stringstream ss;
           ss << "FPS: " << GetFPS();
+
 		  registry.updateForces(GetFrameTime());
-
-		  if(IsKeyDown(KEY_J)) {
-			p2.position -= Vec3(0, 1, 0);
-		  }
-
-		  if(IsKeyDown(KEY_K)) {
-			p2.position += Vec3(0, 1, 0);
-		  }
-
           BeginDrawing();
           ClearBackground(BLACK);
           BeginMode3D(camera);
-		  DrawLine3D(p1.position, p2.position, PINK);
-          DrawCube(p1.position, 2, 2, 2, SKYBLUE);
-		  DrawCube(p2.position, 8, 1, 8, YELLOW);
+		  DrawLine3D(p1.position, anchor, PINK);
+		  DrawSphere(p1.position, 2, SKYBLUE);
+		  DrawCube(anchor, 8, 1, 8, YELLOW);
           DrawGrid(100, 1.0f);
           EndMode3D();
           DrawText(ss.str().c_str(), 10, 10, 28, RED);
           EndDrawing();
 
 		integrator.integrate(GetFrameTime());
+		lastX = GetMouseX();
+		lastY = GetMouseY();
 	}
 
 	CloseWindow();
