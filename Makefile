@@ -1,4 +1,4 @@
-CC=clang++
+CC=g++
 CFLAGS=-std=c++17 -g
 LFLAGS=-lm -lraylib -ldl -pthread
 INCLUDE=-Iinclude/

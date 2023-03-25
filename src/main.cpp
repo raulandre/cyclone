@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
           ClearBackground(BLACK);
           BeginMode3D(camera);
 		  DrawLine3D(p1.position, anchor, PINK);
-		  DrawSphere(p1.position, 2, SKYBLUE);
+		  DrawSphereEx(p1.position, 2, 100, 100, SKYBLUE);
 		  DrawCube(anchor, 8, 1, 8, YELLOW);
           DrawGrid(100, 1.0f);
           EndMode3D();
